@@ -1,29 +1,16 @@
 package org.jianzhao.events;
 
-import org.jianzhao.events.impl.EventEmitterImpl;
-
-import java.lang.reflect.Proxy;
-
 public interface EventEmitter {
 
-    default EventEmitter addListener(String type, EventListener listener, int times) {
-        // Implementation required
-        return this;
-    }
+    EventEmitter addListener(String type, EventListener listener, int times);
 
     default EventEmitter addListener(String type, EventListener listener) {
         return this.addListener(type, listener, -1);
     }
 
-    default EventEmitter removeListener(String type, EventListener listener) {
-        // Implementation required
-        return this;
-    }
+    EventEmitter removeListener(String type, EventListener listener);
 
-    default boolean emit(String type, Object... args) {
-        // Implementation required
-        return true;
-    }
+    boolean emit(String type, Object... args);
 
     default EventEmitter on(String type, EventListener listener) {
         return this.addListener(type, listener);
@@ -37,19 +24,4 @@ public interface EventEmitter {
         return this.removeListener(type, listener);
     }
 
-    @SuppressWarnings("unchecked")
-    static <T extends EventEmitter> T mixin(T eventEmitter) {
-        Class<EventEmitter> clazz = EventEmitter.class;
-        EventEmitter impl = new EventEmitterImpl();
-        return (T) Proxy.newProxyInstance(clazz.getClassLoader(), new Class[]{clazz}, (proxy, method, args) -> {
-            switch (method.getName()) {
-                case "emit":
-                case "removeListener":
-                case "addListener":
-                    return method.invoke(impl, args);
-                default:
-                    return method.invoke(eventEmitter, args);
-            }
-        });
-    }
 }
