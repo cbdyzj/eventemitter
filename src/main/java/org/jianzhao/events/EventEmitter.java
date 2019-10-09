@@ -14,7 +14,6 @@ public interface EventEmitter {
         return this.addListener(type, listener, ALWAYS);
     }
 
-
     default EventEmitter on(String type, EventListener listener) {
         return this.addListener(type, listener);
     }
@@ -26,5 +25,4 @@ public interface EventEmitter {
     default EventEmitter off(String type, EventListener listener) {
         return this.removeListener(type, listener);
     }
-
 }

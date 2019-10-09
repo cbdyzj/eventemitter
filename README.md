@@ -9,31 +9,20 @@ EventEmitter for Java
 ```java
 package org.jianzhao.events;
 
-import lombok.experimental.Delegate;
 import org.jianzhao.events.impl.DefaultEventEmitter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-class TestEventSource implements EventEmitter {
-
-    @Delegate
-    private EventEmitter delegateEventEmitter = new DefaultEventEmitter();
-
-    public void source(Object... data) {
-        this.emit("data", data);
-    }
-}
 
 public class EventEmitterTest {
 
     @Test
     void test() {
-        TestEventSource testEventSource = new TestEventSource();
-        testEventSource.on("data", args -> {
+        EventEmitter emitter = new DefaultEventEmitter();
+        emitter.on("data", args -> {
             String[] expected = { "0", "1" };
             Assertions.assertArrayEquals(expected, args);
         });
-        testEventSource.source("0", "1");
+        emitter.emit("0", "1");
     }
 }
 ```
