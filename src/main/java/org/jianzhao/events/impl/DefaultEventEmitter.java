@@ -9,28 +9,30 @@ import java.util.Map;
 
 public class DefaultEventEmitter implements EventEmitter {
 
-    private Map<String, Map<EventListener, EventListenerWrapper>> listeners = new LinkedHashMap<>();
+    private Map<String, Map<EventListener<?>, EventListenerWrapper<?>>> listeners = new LinkedHashMap<>();
 
     @Override
-    public EventEmitter addListener(@NonNull String type, @NonNull EventListener listener, int times) {
-        EventListenerWrapper wrapper = new EventListenerWrapper(type, listener, times);
-        Map<EventListener, EventListenerWrapper> typedListeners = this.listeners.computeIfAbsent(type, k -> new LinkedHashMap<>());
+    public EventEmitter addListener(@NonNull String type, @NonNull EventListener<?> listener, int times) {
+        EventListenerWrapper<?> wrapper = new EventListenerWrapper<>(type, listener, times);
+        Map<EventListener<?>, EventListenerWrapper<?>> typedListeners
+                = this.listeners.computeIfAbsent(type, k -> new LinkedHashMap<>());
         typedListeners.put(listener, wrapper);
         return this;
     }
 
     @Override
-    public EventEmitter removeListener(@NonNull String type, @NonNull EventListener listener) {
-        Map<EventListener, EventListenerWrapper> typedListeners = this.listeners.get(type);
+    public EventEmitter removeListener(@NonNull String type, @NonNull EventListener<?> listener) {
+        Map<EventListener<?>, EventListenerWrapper<?>> typedListeners = this.listeners.get(type);
         if (typedListeners != null) {
             typedListeners.remove(listener);
         }
         return this;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public boolean emit(String type, Object... args) {
-        Map<EventListener, EventListenerWrapper> typedListeners = this.listeners.get(type);
+    public boolean emit(String type, Object parameter) {
+        Map<EventListener<?>, EventListenerWrapper<?>> typedListeners = this.listeners.get(type);
         if (typedListeners == null) {
             return false;
         }
@@ -41,7 +43,7 @@ public class DefaultEventEmitter implements EventEmitter {
             if (!listener.isAvailable()) {
                 continue;
             }
-            listener.handle(args);
+            listener.handle(parameter);
             if (listener.getTimes() != EventEmitter.ALWAYS) {
                 listener.setTimes(listener.getTimes() - 1);
             }

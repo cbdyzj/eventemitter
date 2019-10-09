@@ -18,11 +18,10 @@ public class EventEmitterTest {
     @Test
     void test() {
         EventEmitter emitter = new DefaultEventEmitter();
-        emitter.on("data", args -> {
-            String[] expected = {"0", "1"};
-            Assertions.assertArrayEquals(expected, args);
+        emitter.on("data", data -> {
+            Assertions.assertEquals(17, data);
         });
-        emitter.emit("data", "0", "1");
+        emitter.emit("data", 17);
     }
 }
 ```

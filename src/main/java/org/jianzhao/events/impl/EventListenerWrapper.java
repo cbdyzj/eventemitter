@@ -5,16 +5,16 @@ import lombok.NonNull;
 import org.jianzhao.events.EventListener;
 
 @Data
-public class EventListenerWrapper implements EventListener {
+public class EventListenerWrapper<T> implements EventListener<T> {
 
     private String type;
     private int times;
 
     private boolean available = true;
-    private EventListener listener;
+    private EventListener<T> listener;
 
     public EventListenerWrapper(@NonNull String type,
-                                @NonNull EventListener eventListener,
+                                @NonNull EventListener<T> eventListener,
                                 int times) {
         this.type = type;
         this.listener = eventListener;
@@ -22,8 +22,8 @@ public class EventListenerWrapper implements EventListener {
     }
 
     @Override
-    public void handle(Object... args) {
-        this.listener.handle(args);
+    public void handle(T parameter) {
+        this.listener.handle(parameter);
     }
 
 }

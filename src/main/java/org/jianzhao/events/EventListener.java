@@ -1,7 +1,7 @@
 package org.jianzhao.events;
 
 @FunctionalInterface
-public interface EventListener {
+public interface EventListener<T> {
 
-    void handle(Object... args);
+    void handle(T parameter);
 }
