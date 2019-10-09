@@ -31,6 +31,9 @@ public class DefaultEventEmitter implements EventEmitter {
     @Override
     public boolean emit(String type, Object... args) {
         Map<EventListener, EventListenerWrapper> typedListeners = this.listeners.get(type);
+        if (typedListeners == null) {
+            return false;
+        }
         for (EventListenerWrapper listener : typedListeners.values()) {
             if (listener.getTimes() == 0) {
                 listener.setAvailable(false);

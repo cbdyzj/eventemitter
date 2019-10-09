@@ -19,10 +19,10 @@ public class EventEmitterTest {
     void test() {
         EventEmitter emitter = new DefaultEventEmitter();
         emitter.on("data", args -> {
-            String[] expected = { "0", "1" };
+            String[] expected = {"0", "1"};
             Assertions.assertArrayEquals(expected, args);
         });
-        emitter.emit("0", "1");
+        emitter.emit("data", "0", "1");
     }
 }
 ```
