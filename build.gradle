@@ -9,8 +9,8 @@ version = '0.0.7'
 sourceCompatibility = 8
 
 repositories {
-    jcenter()
     mavenCentral()
+    jcenter()
 }
 
 task sourcesJar(type: Jar) {
@@ -23,6 +23,9 @@ artifacts {
 }
 
 dependencies {
+    implementation 'org.projectlombok:lombok:1.18.10'
+    annotationProcessor 'org.projectlombok:lombok:1.18.10'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.10'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.4.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.4.2'
 }

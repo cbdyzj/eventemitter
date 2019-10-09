@@ -1,27 +1,29 @@
 package org.jianzhao.events.impl;
 
+import lombok.Data;
+import lombok.NonNull;
 import org.jianzhao.events.EventListener;
 
+@Data
 public class EventListenerWrapper implements EventListener {
 
-    int id;
     private String type;
-    private EventListener delegate;
     private int times;
-    private boolean available = true;
 
-    public EventListenerWrapper(String type,
-                                EventListener eventListener,
+    private boolean available = true;
+    private EventListener listener;
+
+    public EventListenerWrapper(@NonNull String type,
+                                @NonNull EventListener eventListener,
                                 int times) {
-        this.id = eventListener.hashCode();
         this.type = type;
-        this.delegate = eventListener;
+        this.listener = eventListener;
         this.times = times;
     }
 
     @Override
     public void handle(Object... args) {
-        this.delegate.handle(args);
+        this.listener.handle(args);
     }
 
 }
