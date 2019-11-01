@@ -13,6 +13,9 @@ public class DefaultEventEmitter implements EventEmitter {
 
     @Override
     public EventEmitter addListener(@NonNull String type, @NonNull EventListener<?> listener, int times) {
+        if (times < EventEmitter.ALWAYS) {
+            throw new IllegalArgumentException("Illegal times");
+        }
         EventListenerWrapper<?> wrapper = new EventListenerWrapper<>(type, listener, times);
         Map<EventListener<?>, EventListenerWrapper<?>> typedListeners
                 = this.listeners.computeIfAbsent(type, k -> new LinkedHashMap<>());
